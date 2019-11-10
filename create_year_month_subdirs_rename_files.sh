@@ -70,38 +70,28 @@ while read a_file_name; do
   # ${string:position:length}
   # 2015:09:02 07:09:03
   year=${exif_date:0:4}
-  echo $year
   month=${exif_date:5:2}
+  echo $year
   echo $month
-  mkdir -p ${year}/${month}
 
-  # Replace 1st / from $new_file_name with nothing - to use without problem in 
-  # mv command.
-  # new_file_name=${new_file_name#/} # Strips 1st / from beginning/left.
-  # new_file_name="${new_file_name/\\/}" # Deletes 1st /.
-  # file_name_without_slash="${new_file_name:1}" # Deletes 1st char.
-  # file_name_without_slash="${new_file_name#/}"
-  
-  echo 
-  echo "a_file_name:" "$a_file_name"
-  echo "new_file_name:" "$new_file_name"
-  echo
-
-  file_name_without_slash="${new_file_name#/}" # Strips 1st / from beginning/left.
-  # file_name_without_slash: Users/kimlew/Sites/bash_projects/test_mkdir-p/2019-07-24_17-14_1423.jpg
-  echo "file_name_without_slash:" "$file_name_without_slash"
-
-  slash='/'
   just_path=$(dirname "${new_file_name}")
-  just_filename=$(basename "${new_file_name}")
-  new_dir_and_filename=$just_path$slash$year$slash$month$slash$just_filename
+  path_with_subdir_year_month="${just_path}/${year}/${month}"
+  echo "path_with_subdir_year_month:" "$path_with_subdir_year_month"
 
+  echo "a_file_name:" "$a_file_name"
   echo "just_path:" "$just_path"
+
+  mkdir -p ${path_with_subdir_year_month}
+
+  just_filename=$(basename "${new_file_name}")
+  new_dir_and_filename=$just_path/$year/$month/$just_filename
+
+  echo
   echo "just_filename:" "$just_filename"
   echo "new_dir_and_filename:" "$new_dir_and_filename"
 
-  # mv "$a_file_name" "${year}/${month}/$filename"
-  mv "$a_file_name" "new_dir_and_filename"
+  mv "$a_file_name" "$new_dir_and_filename"
+ 
 done
 echo
 echo "Done."
